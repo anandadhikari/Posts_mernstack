@@ -8,31 +8,13 @@ const connectDB = require("./config/db");
 //Import routes
 const posts = require("./routes/post");
 const users = require("./routes/user");
+const path = require("path");
 
 dotenv.config();
 
 connectDB();
 
 const app = express();
-
-// if (process.env.NODE_ENV === "development") {
-//   app.use(morgan("dev"));
-// } else if (process.env.NODE_ENV === "production") {
-//   app.get("/", (req, res) => {
-//     res.send("API is running...");
-//   });
-// }
-
-// app.use(express.static(path.join(__dirname, "client", "build")));
-app.use(express.static("client/public"));
-
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-} else if (process.env.NODE_ENV === "production") {
-  app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-  });
-}
 
 //Accept JSON data in the body
 app.use(express.json());
@@ -42,6 +24,16 @@ app.use("/api", posts);
 app.use("/api", users);
 
 const PORT = process.env.PORT || 5000;
+
+app.use(express.static(path.join(__dirname, "client", "build")));
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+} else if (process.env.NODE_ENV === "production") {
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.listen(
   PORT,
