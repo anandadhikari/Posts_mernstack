@@ -15,18 +15,27 @@ connectDB();
 
 const app = express();
 
+// if (process.env.NODE_ENV === "development") {
+//   app.use(morgan("dev"));
+// } else if (process.env.NODE_ENV === "production") {
+//   app.get("/", (req, res) => {
+//     res.send("API is running...");
+//   });
+// }
+app.use(express.static(path.join(__dirname, "client", "build")));
+
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 } else if (process.env.NODE_ENV === "production") {
-  app.get("/", (req, res) => {
-    res.send("API is running...");
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
   });
 }
 
 //Accept JSON data in the body
 app.use(express.json());
 app.use(cors());
-app.use(express.static("client/public"));
+// app.use(express.static("client/public"));
 
 app.use("/api", posts);
 app.use("/api", users);
