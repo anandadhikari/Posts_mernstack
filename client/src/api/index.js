@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: `https://posts-mern-stacks.herokuapp.com/`, // http://localhost:5000
+  baseURL: `https://posts-mern-stacks.herokuapp.com`,
+  // baseURL: `http://localhost:5000`,
 });
 
 API.interceptors.request.use((req) => {
